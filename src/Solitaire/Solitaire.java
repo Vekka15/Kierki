@@ -32,7 +32,7 @@ public class Solitaire extends Application {
         
         Parent root = FXMLLoader.load(getClass().getResource("View.fxml"));
        // StackPane root1= new StackPane();
-        Scene scene = new Scene(root, 1000, 500);
+        Scene scene = new Scene(root, 1500, 1000);
        // root1.getChildren().add(imgView);
         scene.getStylesheets().add("resources/css/stylesheet.css");
         primaryStage.setTitle("Z wykorzystaniem FXML");

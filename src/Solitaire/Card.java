@@ -6,6 +6,7 @@
 package Solitaire;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -16,16 +17,24 @@ public class Card {
     int shape;
     Boolean color;
     Boolean visible;
-    Image face;
-    Card(int num, int shap,Boolean col,int i){
+    ImageView face;
+    ImageView back;
+    double X;
+    double Y;
+    int numberOfPane;
+    int numberOfChild;
+    int id;
+    
+    Card(int num, int shap,Boolean col,int i,int id){
         this.number=num;
         this.shape=shap;
         this.color=col;
         this.visible=false;
-        this.face=new Image("/resources/images/"+"0"+".png");
+        this.face= new ImageView(new Image("/resources/images/"+i+".png"));
+        this.back = new ImageView(new Image("/resources/images/cardback.png"));
+        this.id = id;
+        
 }
 
-    /*Card(int numberOfCard, int shapeOfCard, Boolean colorOfCard, int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
+    
 }

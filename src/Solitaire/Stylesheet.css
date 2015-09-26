@@ -1,5 +1,5 @@
 .background {
-
+    
 }
 
 .root{
@@ -9,13 +9,11 @@
 
 }
 
-.Image{
-    -fx-position: absolute;
- -fx-translate-y: 100px;
- -fx-translate-x: 100px;
+.ImageView{
+    -fx-padding: 10;
+    -fx-background-color: firebrick;
 }
 
-#przycisk{
-  
- -fx-color: red;
-}
+
+
+
