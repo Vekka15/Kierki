@@ -12,29 +12,38 @@ import javafx.scene.image.ImageView;
  *
  * @author zuzanna
  */
-public class Card {
+public class Card  extends Thread{
     int number;
     int shape;
     Boolean color;
-    Boolean visible;
     ImageView face;
     ImageView back;
+    double startX;
+    double startY;
+    Thread thread;
     double X;
     double Y;
-    int numberOfPane;
-    int numberOfChild;
-    int id;
+    Boolean uncovered;
+    int column;
     
     Card(int num, int shap,Boolean col,int i,int id){
         this.number=num;
         this.shape=shap;
         this.color=col;
-        this.visible=false;
+        this.uncovered=false;
         this.face= new ImageView(new Image("/resources/images/"+i+".png"));
         this.back = new ImageView(new Image("/resources/images/cardback.png"));
-        this.id = id;
-        
+        thread=new Thread(this);
+        this.X=0;
+        this.Y=0;
+        this.column=7;
+      //  thread.start();
 }
+    public void run(){
+        while(true){
+            System.out.println(this.X);
+        }
+    }
 
     
 }
