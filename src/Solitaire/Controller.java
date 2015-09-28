@@ -166,6 +166,8 @@ public class Controller implements Initializable {
 
     }   
     
+    //komentarz zeby jakas tam zmiana była bo musze sprawdzic czy commitowanie działa
+    
     @FXML
        public void createDrag(int i,ArrayList<Card> deck, ArrayList<Integer> randomArray,int number){
             class Delta { double x, y; }
@@ -238,6 +240,33 @@ public class Controller implements Initializable {
      //tworzenie tablicy z randomowymi elementami   
         
         public ArrayList createArray(){
+            ArrayList<Integer> randomArray;
+        randomArray = new ArrayList<Integer>();
+            for(int i=0;i<52;i++){
+                randomArray.add(i);
+            }
+            Collections.shuffle(randomArray);
+            return randomArray;
+        }
+         public ArrayList createArray0(){
+            ArrayList<Integer> randomArray;
+        randomArray = new ArrayList<Integer>();
+            for(int i=0;i<52;i++){
+                randomArray.add(i);
+            }
+            Collections.shuffle(randomArray);
+            return randomArray;
+        }
+          public ArrayList createArray1(){
+            ArrayList<Integer> randomArray;
+        randomArray = new ArrayList<Integer>();
+            for(int i=0;i<52;i++){
+                randomArray.add(i);
+            }
+            Collections.shuffle(randomArray);
+            return randomArray;
+        }
+           public ArrayList createArray2(){
             ArrayList<Integer> randomArray;
         randomArray = new ArrayList<Integer>();
             for(int i=0;i<52;i++){
