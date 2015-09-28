@@ -62,24 +62,9 @@ public class Controller implements Initializable {
         arrayOfColumns.add(column6);
         arrayOfColumns.add(column7);
         
-        int numberOfCard=2;
-        int shapeOfCard=1;
-        Boolean colorOfCard=false;
-        int i;
-        ArrayList<Card> deck = new ArrayList<Card>();
-        ArrayList<Integer> randomArray;
-        for(i=0;i<52;i++){
-            deck.add(new Card(numberOfCard,shapeOfCard,colorOfCard,i,i));
-            numberOfCard++;
-            if (numberOfCard==15){
-                numberOfCard=2;
-                shapeOfCard++;
-                if (shapeOfCard==3){
-                    colorOfCard=true;
-                }
-            }
-        }
-        
+         ArrayList<Card> deck = new ArrayList<Card>();
+         ArrayList<Integer> randomArray;
+        createDeck(deck);
        
       
         //tworzenie kolumn z kartami
@@ -248,32 +233,24 @@ public class Controller implements Initializable {
             Collections.shuffle(randomArray);
             return randomArray;
         }
-         public ArrayList createArray0(){
-            ArrayList<Integer> randomArray;
-        randomArray = new ArrayList<Integer>();
-            for(int i=0;i<52;i++){
-                randomArray.add(i);
+        
+        public void createDeck(ArrayList<Card> deck){
+            int numberOfCard=2;
+        int shapeOfCard=1;
+        Boolean colorOfCard=false;
+        int i;   
+        
+        for(i=0;i<52;i++){
+            deck.add(new Card(numberOfCard,shapeOfCard,colorOfCard,i,i));
+            numberOfCard++;
+            if (numberOfCard==15){
+                numberOfCard=2;
+                shapeOfCard++;
+                if (shapeOfCard==3){
+                    colorOfCard=true;
+                }
             }
-            Collections.shuffle(randomArray);
-            return randomArray;
         }
-          public ArrayList createArray1(){
-            ArrayList<Integer> randomArray;
-        randomArray = new ArrayList<Integer>();
-            for(int i=0;i<52;i++){
-                randomArray.add(i);
-            }
-            Collections.shuffle(randomArray);
-            return randomArray;
-        }
-           public ArrayList createArray2(){
-            ArrayList<Integer> randomArray;
-        randomArray = new ArrayList<Integer>();
-            for(int i=0;i<52;i++){
-                randomArray.add(i);
-            }
-            Collections.shuffle(randomArray);
-            return randomArray;
         }
     
 }
