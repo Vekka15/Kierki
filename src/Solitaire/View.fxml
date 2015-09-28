@@ -9,7 +9,7 @@
 <?import javafx.scene.image.Image ?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="Solitaire.Controller"      >
-<Pane fx:id="gp" translateX="50" translateY="50" >
+<Pane fx:id="gp" LayoutX="50" LayoutY="50" >
     
 </Pane>
  

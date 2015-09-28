@@ -16,7 +16,7 @@
 
 .GridPane{
    -fx-position: absolute;
- -fx-translate-y: 500px;
- -fx-translate-x: 500px; 
+ -fx-Layout-y: 500px;
+ -fx-Layout-x: 500px; 
 }
 

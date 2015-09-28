@@ -4,14 +4,13 @@ package Solitaire;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -43,6 +42,8 @@ public class Controller implements Initializable {
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        //kolumny w których znajdują się karty
         column1=new ArrayList<Card>();
         column2=new ArrayList<Card>();
         column3=new ArrayList<Card>();
@@ -79,12 +80,7 @@ public class Controller implements Initializable {
             }
         }
         
-        ArrayList<Integer> test = new ArrayList<Integer>();
-        test.add(1);
-        test.add(2);
-        test.add(3);
-        test.add(0, 4);
-
+       
       
         //tworzenie kolumn z kartami
         
@@ -136,25 +132,25 @@ public class Controller implements Initializable {
         //tworzenie stosiku z resztą kart
         
         for(int z=countOfCards;z<52;z++){
-            deck.get(randomArray.get(z)).back.setTranslateX(0);
-                deck.get(randomArray.get(z)).back.setTranslateY(0);
+           deck.get(randomArray.get(z)).back.setLayoutX(0);
+               deck.get(randomArray.get(z)).back.setLayoutY(0);
                 deck.get(randomArray.get(z)).startX=deck.get(randomArray.get(z)).back.getLayoutX();
                 deck.get(randomArray.get(z)).startY=deck.get(randomArray.get(z)).back.getLayoutY();
              
                 deck.get(randomArray.get(z)).back.setFitHeight(180);
                 deck.get(randomArray.get(z)).back.setFitWidth(105);
-                gp.getChildren().add(deck.get(randomArray.get(z)).back);
+               gp.getChildren().add(deck.get(randomArray.get(z)).back);
         }
         
        //obsługa kliknięcia na karte ze stosiku
         
-       for(int r=28;r<52;r++){
+      for(int r=28;r<52;r++){
             final int t=r;
             gp.getChildren().get(t).setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                     deck.get(randomArray.get(t)).face.setLayoutX(140);
-                deck.get(randomArray.get(t)).face.setLayoutY(0);
+                deck.get(randomArray.get(t)).face.setLayoutX(140);     
+               deck.get(randomArray.get(t)).face.setLayoutY(0);
                 deck.get(randomArray.get(t)).face.setFitHeight(180);
                 deck.get(randomArray.get(t)).face.setFitWidth(105);
                    deck.get(randomArray.get(t)).startX=deck.get(randomArray.get(t)).face.getLayoutX();
@@ -180,35 +176,40 @@ public class Controller implements Initializable {
      dragDelta.x = gp.getChildren().get(i).getLayoutX() - mouseEvent.getSceneX();
     dragDelta.y = gp.getChildren().get(i).getLayoutY() - mouseEvent.getSceneY();
     gp.getChildren().get(i).setCursor(Cursor.MOVE);
-     gp.getChildren().get(i).setTranslateZ(24);
  
   }
 });
     
 
      gp.getChildren().get(i).setOnMouseReleased(new EventHandler<MouseEvent>() {
-  @Override@SuppressWarnings("null")
+  @Override
  public void handle(MouseEvent mouseEvent) {
           int k=0;
-    /*  gp.getChildren().get(i).setLayoutX(deck.get(randomArray.get(i)).startX);
-       gp.getChildren().get(i).setLayoutY(deck.get(randomArray.get(i)).startY);
-     gp.getChildren().get(i).setCursor(Cursor.HAND);*/
      // TEST
      for(int u=0;u<7;u++){
         ArrayList<Card> column = arrayOfColumns.get(u);
          if((column.get(0).face.getLayoutX()<=gp.getChildren().get(i).getLayoutX())&&(column.get(0).face.getLayoutX()+105>=gp.getChildren().get(i).getLayoutX())&&(column.get(0).face.getLayoutY()<=gp.getChildren().get(i).getLayoutY())&&(column.get(0).face.getLayoutY()+180>=gp.getChildren().get(i).getLayoutY())&&((u!=deck.get(randomArray.get(number)).column)||(deck.get(randomArray.get(number)).column==7))){
+            if((column.get(0).number-1==deck.get(randomArray.get(number)).number)&&(column.get(0).color!=deck.get(randomArray.get(number)).color)) {
              gp.getChildren().get(i).setLayoutX(column.get(0).face.getLayoutX());
-             gp.getChildren().get(i).setLayoutY(column.get(0).face.getLayoutY()+25);             
+             gp.getChildren().get(i).setLayoutY(column.get(0).face.getLayoutY()+25); 
+             Node tmp = gp.getChildren().get(i);
+             gp.getChildren().remove(i);
+             gp.getChildren().add(tmp);
+             gp.getChildren().get(gp.getChildren().size()-1).setLayoutX(column.get(0).face.getLayoutX());
+             gp.getChildren().get(gp.getChildren().size()-1).setLayoutY(column.get(0).face.getLayoutY()+25); 
+             createDrag(gp.getChildren().size()-1,deck,randomArray,i);
              System.out.println("weszło"+u);
              System.out.println(column.get(0).face.getLayoutX());
              System.out.println(gp.getChildren().get(i).getLayoutX());
              k=1;
-             break;           
+             break;
+             
+            }
          }
      }
      if (k==0){
-         gp.getChildren().get(i).setLayoutX(deck.get(randomArray.get(i)).startX);
-       gp.getChildren().get(i).setLayoutY(deck.get(randomArray.get(i)).startY);
+         gp.getChildren().get(i).setLayoutX(deck.get(randomArray.get(number)).startX);
+       gp.getChildren().get(i).setLayoutY(deck.get(randomArray.get(number)).startY);
     
      }
     gp.getChildren().get(i).setCursor(Cursor.HAND);
@@ -216,13 +217,13 @@ public class Controller implements Initializable {
 });
      gp.getChildren().get(i).setOnMouseDragged(new EventHandler<MouseEvent>() {
   @Override public void handle(MouseEvent mouseEvent) {
-       gp.getChildren().get(i).setTranslateZ(24);
      gp.getChildren().get(i).setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
      gp.getChildren().get(i).setLayoutY(mouseEvent.getSceneY() + dragDelta.y); //moze nalezałoby zmieniac X i Y karty, czy warto tez moze ustawiac w której kolumnie jest karta
-    deck.get(randomArray.get(number)).X=(mouseEvent.getSceneX() + dragDelta.x);
-    deck.get(randomArray.get(number)).Y=(mouseEvent.getSceneY() + dragDelta.y);
+     deck.get(randomArray.get(number)).X=(mouseEvent.getX() + dragDelta.x);
+    deck.get(randomArray.get(number)).Y=(mouseEvent.getY() + dragDelta.y);
      if (gp.getChildren().get(i).getLayoutX()==100){
          System.out.println("wykryło");
+         
      }
   
   }
