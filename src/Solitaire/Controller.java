@@ -9,8 +9,6 @@ import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -38,6 +36,9 @@ public class Controller implements Initializable {
     public ArrayList<Card> column6;
     public ArrayList<Card> column7;
     public ArrayList<ArrayList> arrayOfColumns;
+    public int countOfCards;
+      ArrayList<Integer> randomArray;
+      ArrayList<Card> deck;
     //tworzenie talii kart
    
     @Override
@@ -61,58 +62,17 @@ public class Controller implements Initializable {
         arrayOfColumns.add(column5);
         arrayOfColumns.add(column6);
         arrayOfColumns.add(column7);
-        
-         ArrayList<Card> deck = new ArrayList<Card>();
-         ArrayList<Integer> randomArray;
-        createDeck(deck);
+          randomArray=createArray();
+         deck = new ArrayList<Card>();
        
-      
+        createDeck();
+       
+        
+        
         //tworzenie kolumn z kartami
         
-      randomArray=createArray();
-      
-        int width=0;
-        int countOfCards=0;
-        for(int iter=0;iter<7;iter++){
-            int height=200;
-            
-            for(int a=0;a<iter+1;a++){
-                if(a==iter){
-                     deck.get(randomArray.get(countOfCards)).face.setLayoutX(width);
-               deck.get(randomArray.get(countOfCards)).face.setLayoutY(height);
-              deck.get(randomArray.get(countOfCards)).back.setLayoutX(width);
-            deck.get(randomArray.get(countOfCards)).back.setLayoutY(height);
-                deck.get(randomArray.get(countOfCards)).back.setVisible(false);
-                deck.get(randomArray.get(countOfCards)).uncovered=true;
-                deck.get(randomArray.get(countOfCards)).startX=deck.get(randomArray.get(countOfCards)).face.getLayoutX();
-                deck.get(randomArray.get(countOfCards)).startY=deck.get(randomArray.get(countOfCards)).face.getLayoutY();
-                deck.get(randomArray.get(countOfCards) ).face.setFitHeight(180);
-                deck.get(randomArray.get(countOfCards) ).face.setFitWidth(105);
-                gp.getChildren().add(deck.get(randomArray.get(countOfCards)).face);
-                createDrag(countOfCards,deck,randomArray,countOfCards);
-                arrayOfColumns.get(iter).add(0,deck.get(randomArray.get(countOfCards)));
-                deck.get(randomArray.get(countOfCards)).column=iter;
-                }else{
-                deck.get(randomArray.get(countOfCards)).face.setLayoutX(width);
-               deck.get(randomArray.get(countOfCards)).face.setLayoutY(height);
-              deck.get(randomArray.get(countOfCards)).back.setLayoutX(width);
-            deck.get(randomArray.get(countOfCards)).back.setLayoutY(height);
-                 deck.get(randomArray.get(countOfCards)).face.setVisible(false);
-                deck.get(randomArray.get(countOfCards)).startX=deck.get(randomArray.get(countOfCards)).back.getLayoutX();
-                deck.get(randomArray.get(countOfCards)).startY=deck.get(randomArray.get(countOfCards)).back.getLayoutY();
-                deck.get(randomArray.get(countOfCards)).back.setFitHeight(180);
-                deck.get(randomArray.get(countOfCards)).back.setFitWidth(105);
-                gp.getChildren().add(deck.get(randomArray.get(countOfCards)).back);
-                arrayOfColumns.get(iter).add(deck.get(randomArray.get(countOfCards)));
-                deck.get(randomArray.get(countOfCards)).column=iter;
-                }
-                      height=height+25;
-                      
-                countOfCards++;
-                
-        }
-            width=width+170;
-        }
+    
+      createColumns();
         
         //tworzenie stosiku z resztą kart
         
@@ -140,87 +100,30 @@ public class Controller implements Initializable {
                 deck.get(randomArray.get(t)).face.setFitWidth(105);
                    deck.get(randomArray.get(t)).startX=deck.get(randomArray.get(t)).face.getLayoutX();
                 deck.get(randomArray.get(t)).startY=deck.get(randomArray.get(t)).face.getLayoutY();
-                 gp.getChildren().add(deck.get(randomArray.get(t)).face);
+                // gp.getChildren().add(deck.get(randomArray.get(t)).face);
+                gp.getChildren().add(deck.get(randomArray.get(t)).child);
+                deck.get(randomArray.get(t)).createDrag(deck, randomArray,gp,arrayOfColumns);
                  deck.get(randomArray.get(t)).back.setVisible(false);
                  System.out.println(gp.getChildren().size()-1);
-                 createDrag(gp.getChildren().size()-1,deck,randomArray,t);
+                 deck.get(randomArray.get(countOfCards)).id=t;
+                // createDrag(gp.getChildren().size()-1,deck,randomArray,t);
                 }
             
                     });
         }
+      
+      for (int y=0;y<7;y++){
+          ArrayList<Card> kolumna = arrayOfColumns.get(y);
+          for (int z=0; z<kolumna.size();z++){
+              System.out.println("Kolumna: "+y+" Ele: "+ z + "Num karty: "+kolumna.get(z).number);
+          }
+      }
 
-    }   
+    }  
     
-    //komentarz zeby jakas tam zmiana była bo musze sprawdzic czy commitowanie działa
     
     @FXML
-       public void createDrag(int i,ArrayList<Card> deck, ArrayList<Integer> randomArray,int number){
-            class Delta { double x, y; }
-        final Delta dragDelta = new Delta();
-    gp.getChildren().get(i).setOnMousePressed(new EventHandler<MouseEvent>() {
-  @Override public void handle(MouseEvent mouseEvent) {
-    // record a delta distance for the drag and drop operation.
-     dragDelta.x = gp.getChildren().get(i).getLayoutX() - mouseEvent.getSceneX();
-    dragDelta.y = gp.getChildren().get(i).getLayoutY() - mouseEvent.getSceneY();
-    gp.getChildren().get(i).setCursor(Cursor.MOVE);
- 
-  }
-});
-    
-
-     gp.getChildren().get(i).setOnMouseReleased(new EventHandler<MouseEvent>() {
-  @Override
- public void handle(MouseEvent mouseEvent) {
-          int k=0;
-     // TEST
-     for(int u=0;u<7;u++){
-        ArrayList<Card> column = arrayOfColumns.get(u);
-         if((column.get(0).face.getLayoutX()<=gp.getChildren().get(i).getLayoutX())&&(column.get(0).face.getLayoutX()+105>=gp.getChildren().get(i).getLayoutX())&&(column.get(0).face.getLayoutY()<=gp.getChildren().get(i).getLayoutY())&&(column.get(0).face.getLayoutY()+180>=gp.getChildren().get(i).getLayoutY())&&((u!=deck.get(randomArray.get(number)).column)||(deck.get(randomArray.get(number)).column==7))){
-            if((column.get(0).number-1==deck.get(randomArray.get(number)).number)&&(column.get(0).color!=deck.get(randomArray.get(number)).color)) {
-             gp.getChildren().get(i).setLayoutX(column.get(0).face.getLayoutX());
-             gp.getChildren().get(i).setLayoutY(column.get(0).face.getLayoutY()+25); 
-             Node tmp = gp.getChildren().get(i);
-             gp.getChildren().remove(i);
-             gp.getChildren().add(tmp);
-             gp.getChildren().get(gp.getChildren().size()-1).setLayoutX(column.get(0).face.getLayoutX());
-             gp.getChildren().get(gp.getChildren().size()-1).setLayoutY(column.get(0).face.getLayoutY()+25); 
-             createDrag(gp.getChildren().size()-1,deck,randomArray,i);
-             System.out.println("weszło"+u);
-             System.out.println(column.get(0).face.getLayoutX());
-             System.out.println(gp.getChildren().get(i).getLayoutX());
-             k=1;
-             break;
-             
-            }
-         }
-     }
-     if (k==0){
-         gp.getChildren().get(i).setLayoutX(deck.get(randomArray.get(number)).startX);
-       gp.getChildren().get(i).setLayoutY(deck.get(randomArray.get(number)).startY);
-    
-     }
-    gp.getChildren().get(i).setCursor(Cursor.HAND);
-  }
-});
-     gp.getChildren().get(i).setOnMouseDragged(new EventHandler<MouseEvent>() {
-  @Override public void handle(MouseEvent mouseEvent) {
-     gp.getChildren().get(i).setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-     gp.getChildren().get(i).setLayoutY(mouseEvent.getSceneY() + dragDelta.y); //moze nalezałoby zmieniac X i Y karty, czy warto tez moze ustawiac w której kolumnie jest karta
-     deck.get(randomArray.get(number)).X=(mouseEvent.getX() + dragDelta.x);
-    deck.get(randomArray.get(number)).Y=(mouseEvent.getY() + dragDelta.y);
-     if (gp.getChildren().get(i).getLayoutX()==100){
-         System.out.println("wykryło");
-         
-     }
   
-  }
-});
-     gp.getChildren().get(i).setOnMouseEntered(new EventHandler<MouseEvent>() {
-  @Override public void handle(MouseEvent mouseEvent) {
-     gp.getChildren().get(i).setCursor(Cursor.HAND);
-  }
-});
-       }
         
      //tworzenie tablicy z randomowymi elementami   
         
@@ -234,7 +137,7 @@ public class Controller implements Initializable {
             return randomArray;
         }
         
-        public void createDeck(ArrayList<Card> deck){
+        public void createDeck(){
             int numberOfCard=2;
         int shapeOfCard=1;
         Boolean colorOfCard=false;
@@ -251,6 +154,56 @@ public class Controller implements Initializable {
                 }
             }
         }
+        }
+        
+        public void createColumns(){
+           int width=0;
+        countOfCards=0;
+        for(int iter=0;iter<7;iter++){
+            int height=200;
+            
+            for(int a=0;a<iter+1;a++){
+                if(a==iter){
+                     deck.get(randomArray.get(countOfCards)).face.setLayoutX(width);
+               deck.get(randomArray.get(countOfCards)).face.setLayoutY(height);
+                deck.get(randomArray.get(countOfCards)).startX=deck.get(randomArray.get(countOfCards)).face.getLayoutX();
+                deck.get(randomArray.get(countOfCards)).startY=deck.get(randomArray.get(countOfCards)).face.getLayoutY();
+                deck.get(randomArray.get(countOfCards) ).face.setFitHeight(180);
+                deck.get(randomArray.get(countOfCards) ).face.setFitWidth(105);
+               deck.get(randomArray.get(countOfCards)).child=deck.get(randomArray.get(countOfCards)).face;
+                deck.get(randomArray.get(countOfCards)).createDrag(deck, randomArray,gp,arrayOfColumns);
+                gp.getChildren().add(deck.get(randomArray.get(countOfCards)).child);
+                deck.get(randomArray.get(countOfCards)).id=countOfCards;
+                arrayOfColumns.get(iter).add(0,deck.get(randomArray.get(countOfCards))); //to dodajemy na chama na 0 pozycje
+                deck.get(randomArray.get(countOfCards)).column=iter;
+                }else{
+                deck.get(randomArray.get(countOfCards)).face.setLayoutX(width);
+               deck.get(randomArray.get(countOfCards)).face.setLayoutY(height);
+              deck.get(randomArray.get(countOfCards)).back.setLayoutX(width);
+            deck.get(randomArray.get(countOfCards)).back.setLayoutY(height);
+             
+                deck.get(randomArray.get(countOfCards)).startX=deck.get(randomArray.get(countOfCards)).back.getLayoutX();
+                deck.get(randomArray.get(countOfCards)).startY=deck.get(randomArray.get(countOfCards)).back.getLayoutY();
+                deck.get(randomArray.get(countOfCards)).back.setFitHeight(180);
+                deck.get(randomArray.get(countOfCards)).back.setFitWidth(105);
+                deck.get(randomArray.get(countOfCards)).face.setFitHeight(180);
+                deck.get(randomArray.get(countOfCards)).face.setFitWidth(105);
+                deck.get(randomArray.get(countOfCards)).child=deck.get(randomArray.get(countOfCards)).face;
+                gp.getChildren().add(deck.get(randomArray.get(countOfCards)).back); //to na samej górze jest na 1 pozycji bo dodawalismy od gory na dol
+                gp.getChildren().add(deck.get(randomArray.get(countOfCards)).child);
+                deck.get(randomArray.get(countOfCards)).child.setVisible(false);
+                arrayOfColumns.get(iter).add(deck.get(randomArray.get(countOfCards)));
+                deck.get(randomArray.get(countOfCards)).column=iter;
+                deck.get(randomArray.get(countOfCards)).id=countOfCards;
+                }
+                      height=height+25;
+                      
+                countOfCards++;
+                
+        }
+            width=width+170;
+        }
+         
         }
     
 }
